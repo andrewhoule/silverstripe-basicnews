@@ -7,7 +7,7 @@ class NewsHolder extends Page {
     );
 	
    	private static $allowed_children = array("NewsPage" );
-	static $icon = "../images/newsholder";
+	private static $icon = "../images/newsholder";
 
 	public function getCMSFields() {
         $imgfield = UploadField::create('DefaultPhoto')->setTitle("Default Featured Photo (Used on individual news pages if feature photo is empty)");
