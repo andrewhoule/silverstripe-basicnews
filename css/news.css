@@ -1,0 +1,28 @@
+.news-thumb {
+	float: left;
+	width: 150px;
+}
+.news-info {
+	margin-left: 175px;
+}
+.news-next-prev {
+	float: left;
+	width: 50%;
+}
+.news-next-prev ul {
+	margin: 0;
+	padding: 0;
+}
+.news-next-prev li {
+	float: left;
+	list-style: none;
+	margin: 0 5px 0 0; 
+	padding: 0;
+}
+.news-next-prev li:last-child {
+	margin: 0;
+}
+.news-return {
+	float: right;
+	width: 50%;
+}
