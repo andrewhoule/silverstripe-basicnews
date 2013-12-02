@@ -43,6 +43,14 @@ class NewsPage extends Page {
         }
     }
 
+    public function NoFeaturePhoto() {
+        if($this->Photo()->exists() || $this->Parent()->getComponent('DefaultPhoto')->exists()) {
+            return false;
+        }
+        else 
+            return true; 
+    }
+
     public function PhotoSized($x=400) {
         return $this->Photo()->setWidth($x);
     }

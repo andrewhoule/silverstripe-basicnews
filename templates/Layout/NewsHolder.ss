@@ -8,7 +8,7 @@
                        <img src="$FeaturePhotoCropped(140,140).URL" alt="MenuTitle" />
                     </a>
                 </div><!-- news-thumb -->
-                <div class="news-info">
+                <div class="news-info<% if NoFeaturePhoto %> no-photo<% end_if %>">
                     <h2><a href="$Link">$MenuTitle</a></h2>
                     <p class="meta"><% if Author %><span>by</span> $Author <% end_if %> <span>on</span> $NiceDate</p>
                     <p>$ContentExcerpt <a href="$Link">Read on &rarr;</a></p>

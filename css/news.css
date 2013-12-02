@@ -5,6 +5,9 @@
 .news-info {
 	margin-left: 175px;
 }
+.news-info.no-photo {
+	margin-left: 0;
+}
 .news-next-prev {
 	float: left;
 	width: 50%;
