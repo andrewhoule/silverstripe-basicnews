@@ -15,7 +15,7 @@ class NewsPage extends Page {
         "Date" => "now"
     );
 	
-   	private static $icon = "../images/newspage";
+   	private static $icon = "basicnews/images/newspage";
 
    	function getCMSFields() {
         $dateField = DateField::create("Date")->setTitle("Article Date (for example: 12/31/2010)");
