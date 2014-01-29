@@ -11,7 +11,8 @@
     }],
     "require": {
         "silverstripe/cms": "3.*",
-        "silverstripe/framework": "3.*"
+        "silverstripe/framework": "3.*",
+        "silverstripe/display-logic": "*"
     },
     "extra": {
         "installer-name": "basicnews"
