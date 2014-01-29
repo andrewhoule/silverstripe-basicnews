@@ -15,7 +15,7 @@ class NewsPage extends Page {
         "Date" => "now"
     );
 	
-   	private static $icon = "../images/newspage";
+   	private static $icon = "basicnews/images/newspage";
 
    	function getCMSFields() {
         $dateField = DateField::create("Date")->setTitle("Article Date (for example: 12/31/2010)");
@@ -41,6 +41,14 @@ class NewsPage extends Page {
         else {
             return false;
         }
+    }
+
+    public function NoFeaturePhoto() {
+        if($this->Photo()->exists() || $this->Parent()->getComponent('DefaultPhoto')->exists()) {
+            return false;
+        }
+        else 
+            return true; 
     }
 
     public function PhotoSized($x=400) {
@@ -90,6 +98,10 @@ class NewsPage_Controller extends Page_Controller {
         else
             return false;
     } 
+
+    public function NewsHolder() {
+        return $this->Parent();
+    }
 	
 }
 
