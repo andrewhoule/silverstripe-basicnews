@@ -3,6 +3,7 @@
 	<div class="news-excerpts">
 		<% loop PaginatedNews %>
 			<div class="news-excerpt">
+<<<<<<< HEAD
                 <% if FeaturePhotoCropped %>
                     <div class="news-thumb">
                         <a href="$Link">
@@ -10,6 +11,13 @@
                         </a>
                     </div><!-- news-thumb -->
                 <% end_if %>
+=======
+                <div class="news-thumb">
+                    <a href="$Link">
+                       <img src="$FeaturePhotoCropped(140,140).URL" alt="MenuTitle" />
+                    </a>
+                </div><!-- news-thumb -->
+>>>>>>> 1d98f40da6b811f7a8f1984caa612823a3756460
                 <div class="news-info<% if NoFeaturePhoto %> no-photo<% end_if %>">
                     <h2><a href="$Link">$MenuTitle</a></h2>
                     <p class="meta"><% if Author %><span>by</span> $Author <% end_if %> <span>on</span> $NiceDate</p>
