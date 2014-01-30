@@ -10,11 +10,6 @@
                         </a>
                     </div><!-- news-thumb -->
                 <% end_if %>
-                <div class="news-thumb">
-                    <a href="$Link">
-                       <img src="$FeaturePhotoCropped(140,140).URL" alt="MenuTitle" />
-                    </a>
-                </div><!-- news-thumb -->
                 <div class="news-info<% if NoFeaturePhoto %> no-photo<% end_if %>">
                     <h2><a href="$Link">$MenuTitle</a></h2>
                     <p class="meta"><% if Author %><span>by</span> $Author <% end_if %> <span>on</span> $NiceDate</p>
