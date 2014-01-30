@@ -1,14 +1,7 @@
 <div class="news-item">
 	<div class="news-header-wrap">
 		<h2 class="news-header">$MenuTitle</h2>
-		<p class="meta"><% if Author %><span>by</span> $Author <% end_if %> <span>on</span> $NiceDate</p>
-		<% if NewsCategories %>
-            <p class="categories">
-                <% loop NewsCategories %>
-                    <a href="$Link">$Title</a><% if Last %><% else %>, <% end_if %>
-                <% end_loop %>
-            </p>
-        <% end_if %>
+		<% include NewsMeta %>
 		<% if NewsHolder.ShowShare %>
 			<div class="share-icons">
 				<span class="label">Share</span>
