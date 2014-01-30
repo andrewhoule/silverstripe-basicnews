@@ -14,8 +14,8 @@ Simple News Module
 * Create a new news holder page and sub news pages.
 
 ## Todo
-* Add share options
 * Add date filters
 * Add RSS Feed
+* Add commenting option
 
 
