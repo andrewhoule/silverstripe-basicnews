@@ -1,9 +1,11 @@
-<h1 class="news-category-title">$NewsCategory.Title<span> News</span></h1>
-<% if NewsCategory.Description %>
-	<div class="news-category-description">
-		$NewsCategory.Description
-	</div><!-- news-category-description -->
-<% end_if %>
+<div class="news-category-meta">
+	<h1 class="news-category-title">$NewsCategory.Title<span> News</span></h1>
+	<% if NewsCategory.Description %>
+		<div class="news-category-description">
+			$NewsCategory.Description
+		</div><!-- news-category-description -->
+	<% end_if %>
+</div><!-- news-category-meta -->
 <% if PaginatedNews %>
 	<% include NewsExcerpts %>
 <% end_if %>
