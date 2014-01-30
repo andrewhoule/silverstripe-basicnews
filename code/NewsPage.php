@@ -2,7 +2,7 @@
  
 class NewsPage extends Page {
 
-	private static $db = array(
+    private static $db = array(
         "Date" => "Date",
         "Author" => "Text"
     );
@@ -11,24 +11,45 @@ class NewsPage extends Page {
         'Photo' => 'Image'
     );
 
+    private static $many_many = array(
+        'NewsCategories' => 'NewsCategory'
+    );
+
     private static $defaults = array (
         "Date" => "now"
     );
-	
-   	private static $icon = "basicnews/images/newspage";
+    
+    private static $icon = "basicnews/images/newspage";
 
-   	function getCMSFields() {
+    function getCMSFields() {
         $dateField = DateField::create("Date")->setTitle("Article Date (for example: 12/31/2010)");
         $dateField->setConfig('showcalendar', true);
         $dateField->setConfig('dateformat', 'MM/dd/YYYY');
         $imgfield = UploadField::create('Photo')->setTitle("Featured Photo");
         $imgfield->folderName = "News"; 
         $imgfield->getValidator()->allowedExtensions = array('jpg','jpeg','gif','png');
-	    $fields = parent::getCMSFields();
-	    $fields->addFieldToTab('Root.Main', $dateField, 'Content');
-	    $fields->addFieldToTab('Root.Main', TextField::create("Author")->setTitle("Author Name"), 'Content');
+        $fields = parent::getCMSFields();
+        $fields->addFieldToTab('Root.Main', $dateField, 'Content');
+        $fields->addFieldToTab('Root.Main', TextField::create("Author")->setTitle("Author Name"), 'Content');
         $fields->addFieldToTab('Root.Main', $imgfield, 'Content');
-	    return $fields;
+
+        $CategoriesRelationshipGridField = new GridField(
+            'NewsCategories',
+            'NewsCategory',
+            $this->NewsCategories(),
+            GridFieldConfig::create()
+                ->addComponent(new GridFieldManyRelationHandler(false))
+                ->addComponent(new GridFieldToolbarHeader())
+                ->addComponent(new GridFieldAddNewButton('toolbar-header-right'))
+                ->addComponent(new GridFieldSortableHeader())
+                ->addComponent(new GridFieldDataColumns())
+                ->addComponent(new GridFieldPaginator(20))
+                ->addComponent(new GridFieldEditButton())
+                ->addComponent(new GridFieldDeleteAction())
+                ->addComponent(new GridFieldDetailForm())
+        );
+        $fields->addFieldToTab('Root.Categories', $CategoriesRelationshipGridField);
+        return $fields;
     }
 
     public function FeaturePhotoCropped($x=140,$y=140) {
@@ -72,12 +93,12 @@ class NewsPage extends Page {
  
 class NewsPage_Controller extends Page_Controller {
 
-	public function init() {
-    	parent::init();
-      	Requirements::CSS("news/css/news.css");
-   	}
+    public function init() {
+        parent::init();
+        Requirements::CSS("news/css/news.css");
+    }
 
-	public function PrevNextPage($Mode = 'next') {
+    public function PrevNextPage($Mode = 'next') {
         if($Mode == 'next'){
             $Where = "ParentID = ($this->ParentID) AND Sort > ($this->Sort)";
             $Sort = "Sort ASC";
@@ -102,7 +123,7 @@ class NewsPage_Controller extends Page_Controller {
     public function NewsHolder() {
         return $this->Parent();
     }
-	
+    
 }
 
 ?>

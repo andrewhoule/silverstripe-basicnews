@@ -12,7 +12,8 @@
     "require": {
         "silverstripe/cms": "3.*",
         "silverstripe/framework": "3.*",
-        "silverstripe/display-logic": "*"
+        "silverstripe/display-logic": "*",
+        "simonwelsh/gridfieldrelationhandler": "*"
     },
     "extra": {
         "installer-name": "basicnews"

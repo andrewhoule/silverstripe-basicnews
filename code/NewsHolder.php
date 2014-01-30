@@ -45,7 +45,32 @@ class NewsHolder_Controller extends Page_Controller {
       	Requirements::CSS("news/css/news.css");
    	}
 
-	function GetNewsPages() {
+   	private static $allowed_actions = array(
+        'category'
+    );
+     
+    public function getCategory() {
+        $Params = $this->getURLParams();
+        if(is_numeric($Params['ID']) && $Category = NewsCategory::get()->byID((int)$Params['ID'])) {         
+            return $Category;
+        }
+        else
+            return false;
+    }
+  
+    public function category() {       
+        if($Category = $this->getCategory()) {
+        $Data = array(
+            'NewsCategory' => $Category
+        );
+        return $this->customise(array('NewsCategory' => $Category))->renderWith(array('NewsCategory', 'Page'));
+        }
+        else {
+            return $this->httpError(404, 'Sorry that news category could not be found');
+        }
+    }
+
+	public function GetNewsPages() {
 		return NewsPage::get()->filter("ParentID","$this->ID")->sort("Date","DESC");
 	}
 
