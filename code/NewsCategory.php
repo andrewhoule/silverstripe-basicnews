@@ -25,10 +25,10 @@ class NewsCategory extends DataObject {
 	
 	public function Link() {
 		if(Controller::curr()->ClassName == 'NewsHolder') {
-			return Controller::curr()->URLSegment . "/category/" . $this->ID;
+			return Controller::curr()->Link() . "category/" . $this->ID;
 		}
 		if(Controller::curr()->ClassName == 'NewsPage') {
-			return Controller::curr()->Parent()->URLSegment . "/category/" . $this->ID;
+			return Controller::curr()->Parent()->Link() . "category/" . $this->ID;
 		}
 	}
 
