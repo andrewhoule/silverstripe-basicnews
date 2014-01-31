@@ -35,7 +35,7 @@ class NewsPage extends Page {
 
         $CategoriesRelationshipGridField = new GridField(
             'NewsCategories',
-            'NewsCategory',
+            'News Category',
             $this->NewsCategories(),
             GridFieldConfig::create()
                 ->addComponent(new GridFieldManyRelationHandler(false))
