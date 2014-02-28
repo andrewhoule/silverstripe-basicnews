@@ -4,7 +4,7 @@
             <% if FeaturePhotoCropped %>
                 <div class="news-thumb">
                     <a href="$Link">
-                       <img src="$FeaturePhotoCropped(140,140).URL" alt="MenuTitle" />
+                       <img src="$FeaturePhotoCropped.URL" alt="MenuTitle" />
                     </a>
                 </div><!-- news-thumb -->
             <% end_if %>

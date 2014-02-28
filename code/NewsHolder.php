@@ -6,11 +6,18 @@ class NewsHolder extends Page {
 		'ShowShare' => 'Boolean',
 		'ShowFacebook' => 'Boolean',
 		'ShowTwitter' => 'Boolean',
-		'ShowGoogle' => 'Boolean'
+		'ShowGoogle' => 'Boolean',
+		'ThumbnailHeight' => 'Int',
+		'ThumbnailWidth' => 'Int'
 	);
 
 	private static $has_one = array(
         'DefaultPhoto' => 'Image'
+    );
+
+    private static $defaults = array(
+    	'ThumbnailWidth' => '140',
+    	'ThumbnailHeight' => '140'
     );
 	
    	private static $allowed_children = array("NewsPage" );
@@ -23,6 +30,8 @@ class NewsHolder extends Page {
 	    $fields = parent::getCMSFields();
 	   	$fields->addFieldsToTab("Root.Config", array(
 	    	HeaderField::create("ImageHeader","Default Featured Photo"),
+	    	TextField::create("ThumbnailHeight","Feature Photo Height"),
+	    	TextField::create("ThumbnailWidth","Feature Photo Width"),
 	    	$imagefield,
 	    	HeaderField::create("ShareIcons","Share Icons"),
 	    	CheckboxField::create("ShowShare")->setTitle("Show Share Icons"),
