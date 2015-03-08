@@ -49,7 +49,7 @@
                         </ul>
                     </div><!-- share-icons -->
                 <% end_if %>
-                <p>$ContentExcerpt <a href="$Link">Read on &rarr;</a></p>
+                <p>$ContentExcerpt<span class="read-on"> <a href="$Link">Read on &rarr;</a></span></p>
             </div><!-- news-info -->
         </div><!-- news-excerpt -->
 	<% end_loop %>
