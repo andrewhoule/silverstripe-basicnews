@@ -20,6 +20,10 @@ class NewsHolder extends Page {
     'NewsCategories' => 'NewsCategory'
   );
 
+  private static $extensions = array(
+    'Lumberjack'
+  );
+
   private static $defaults = array(
   	'ThumbnailWidth' => '140',
    	'ThumbnailHeight' => '140',
@@ -74,14 +78,26 @@ class NewsHolder extends Page {
  
 class NewsHolder_Controller extends Page_Controller {
 
+  private static $allowed_actions = array(
+    'category',
+    'rss'
+  );
+
 	public function init() {
     parent::init();
     Requirements::CSS("news/css/news.css");
+    RSSFeed::linkToFeed($this->Link() . "rss", $this->SiteConfig->Title . " News");
   }
 
-  private static $allowed_actions = array(
-    'category'
-  );
+  public function rss() {
+    $rss = new RSSFeed(
+      $this->GetNewsPages(), 
+      $this->Link(), 
+      $this->SiteConfig->Title . " News", 
+      "RSS feed for the news from " . $this->SiteConfig->Title
+    );
+    return $rss->outputToBrowser();
+  }
      
   public function getCategory() {
     $Params = $this->getURLParams();

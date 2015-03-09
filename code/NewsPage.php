@@ -15,6 +15,14 @@ class NewsPage extends Page {
     'NewsCategories' => 'NewsCategory'
   );
 
+  public function singular_name() {
+    return 'News Page';
+  }
+
+  private static $default_parent = 'NewsHolder';
+  private static $can_be_root = false;
+  private static $show_in_sitetree = false;
+
   private static $defaults = array (
     'Date' => 'now',
     'ShowInMenus' => false
