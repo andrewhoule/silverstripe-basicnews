@@ -73,6 +73,10 @@ class NewsHolder extends Page {
 	  $showgoogle->displayIf('ShowShare')->isChecked();
 	  return $fields;
   }
+
+  public function getLumberjackTitle() {
+    return "Posts";
+  }
  
 }
  
@@ -131,5 +135,18 @@ class NewsHolder_Controller extends Page_Controller {
 	  $PaginatedNews->setPageLength($NewsExcerptsPerPage);
 	  return $PaginatedNews;
 	}
+
+  public function NewsCategories() {
+    $CategoriesFiltered = new ArrayList();
+    $AllCategories = $this->getComponents('NewsCategories');
+    if($AllCategories) {
+      foreach($AllCategories AS $Category) {
+        if($Category->GetNewsPages()->Count() > 0) {
+          $CategoriesFiltered->push($Category); 
+        }
+      }
+    }
+    return $CategoriesFiltered;
+  }
 	
 }

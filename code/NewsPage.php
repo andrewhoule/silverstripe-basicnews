@@ -16,7 +16,7 @@ class NewsPage extends Page {
   );
 
   public function singular_name() {
-    return 'News Page';
+    return 'Post';
   }
 
   private static $default_parent = 'NewsHolder';
