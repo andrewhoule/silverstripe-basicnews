@@ -13,7 +13,7 @@
     "silverstripe/cms": "3.*",
     "silverstripe/framework": "3.*",
     "silverstripe/display-logic": "*",
-    "micmania1/silverstripe-lumberjack": "*"
+    "silverstripe/lumberjack": "*"
   },
   "suggest": {
     "unclecheese/betterbuttons": "*"
