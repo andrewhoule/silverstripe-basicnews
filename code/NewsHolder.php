@@ -1,5 +1,5 @@
-<?php 
- 
+<?php
+
 class NewsHolder extends Page
 {
 
@@ -10,27 +10,28 @@ class NewsHolder extends Page
         'ShowGoogle' => 'Boolean',
         'ThumbnailHeight' => 'Int',
         'ThumbnailWidth' => 'Int',
-    'NewsExcerptsPerPage' => 'Int'
+        'NewsExcerptsPerPage' => 'Int'
     );
 
     private static $has_one = array(
-    'DefaultPhoto' => 'Image'
-  );
+        'DefaultPhoto' => 'Image'
+    );
 
     private static $has_many = array(
-    'NewsCategories' => 'NewsCategory'
-  );
+        'NewsCategories' => 'NewsCategory',
+        'NewsAuthors' => 'NewsAuthor'
+    );
 
     private static $extensions = array(
-    'Lumberjack'
-  );
+        'Lumberjack'
+    );
 
     private static $defaults = array(
-    'ThumbnailWidth' => '140',
-    'ThumbnailHeight' => '140',
-    'NewsExcerptsPerPage' => '15'
-  );
-    
+        'ThumbnailWidth' => '140',
+        'ThumbnailHeight' => '140',
+        'NewsExcerptsPerPage' => '15'
+    );
+
     private static $allowed_children = array('NewsPage');
     private static $icon = 'basicnews/images/newsholder';
 
@@ -40,55 +41,62 @@ class NewsHolder extends Page
         $imagefield->folderName = 'News';
         $imagefield->getValidator()->allowedExtensions = array('jpg','jpeg','gif','png');
         $imagefield->getValidator()->setAllowedMaxFileSize('2097152'); // 2 MB in bytes
-      $fields = parent::getCMSFields();
-        $NewsCategoriesGridField = new GridField(
-      'NewsCategories',
-      'Category',
-      $this->NewsCategories(),
-      GridFieldConfig::create()
-        ->addComponent(new GridFieldToolbarHeader())
-        ->addComponent(new GridFieldAddNewButton('toolbar-header-right'))
-        ->addComponent(new GridFieldSortableHeader())
-        ->addComponent(new GridFieldDataColumns())
-        ->addComponent(new GridFieldPaginator(50))
-        ->addComponent(new GridFieldEditButton())
-        ->addComponent(new GridFieldDeleteAction())
-        ->addComponent(new GridFieldDetailForm())
-        ->addComponent(new GridFieldFilterHeader())
-    );
-        $fields->addFieldToTab("Root.Categories", $NewsCategoriesGridField);
+        $fields = parent::getCMSFields();
+        $fields->addFieldToTab('Root.Categories', GridField::create(
+            'NewsCategories',
+            'Category',
+            $this->NewsCategories(),
+            GridFieldConfig_RecordEditor::create(50)
+        ));
+        $fields->addFieldToTab('Root.Authors', GridField::create(
+            'NewsAuthors',
+            'Author',
+            $this->NewsAuthors(),
+            GridFieldConfig_RecordEditor::create(50)
+        ));
         $fields->addFieldsToTab('Root.Config', array(
-        HeaderField::create('ImageHeader')->setTitle('Default Featured Photo Options'),
-        TextField::create('ThumbnailHeight')->setTitle('Feature Photo Height'),
-        TextField::create('ThumbnailWidth')->setTitle('Feature Photo Width'),
-        $imagefield,
-      HeaderField::create('NewsExcerptsHeader')->setTitle('Excerpt Options'),
-      NumericField::create('NewsExcerptsPerPage')->setTitle('News Excerpts Per Page'),
-        HeaderField::create('ShareIcons')->setTitle('Share Icon Options'),
-        CheckboxField::create('ShowShare')->setTitle('Show Share Icons'),
-        $showfacebook = CheckboxField::create('ShowFacebook')->setTitle('Show Facebook Icon'),
-        $showtwitter = CheckboxField::create('ShowTwitter')->setTitle('Show Twitter Icon'),
-        $showgoogle = CheckboxField::create('ShowGoogle')->setTitle('Show Google Icon')
-    ));
-        $showfacebook->displayIf('ShowShare')->isChecked();
-        $showtwitter->displayIf('ShowShare')->isChecked();
-        $showgoogle->displayIf('ShowShare')->isChecked();
+            HeaderField::create('ImageHeader')
+                ->setTitle('Default Featured Photo Options'),
+            TextField::create('ThumbnailHeight')
+                ->setTitle('Feature Photo Height'),
+            TextField::create('ThumbnailWidth')
+                ->setTitle('Feature Photo Width'),
+            $imagefield,
+            HeaderField::create('NewsExcerptsHeader')
+                ->setTitle('Excerpt Options'),
+            NumericField::create('NewsExcerptsPerPage')
+                ->setTitle('News Excerpts Per Page'),
+            HeaderField::create('ShareIcons')
+                ->setTitle('Share Icon Options'),
+            CheckboxField::create('ShowShare')
+                ->setTitle('Show Share Icons'),
+            DisplayLogicWrapper::create(
+                CheckboxField::create('ShowFacebook')
+                    ->setTitle('Show Facebook Icon'),
+                CheckboxField::create('ShowTwitter')
+                    ->setTitle('Show Twitter Icon'),
+                CheckboxField::create('ShowGoogle')
+                    ->setTitle('Show Google Icon')
+            )->displayIf('ShowShare')->isChecked()->end()
+        ));
         return $fields;
     }
 
     public function getLumberjackTitle()
     {
-        return "Posts";
+        return 'Posts';
     }
+
 }
- 
+
 class NewsHolder_Controller extends Page_Controller
 {
 
     private static $allowed_actions = array(
-    'category',
-    'rss'
-  );
+        'category',
+        'author',
+        'rss'
+    );
 
     public function init()
     {
@@ -100,31 +108,50 @@ class NewsHolder_Controller extends Page_Controller
     public function rss()
     {
         $rss = new RSSFeed(
-      $this->GetNewsPages(),
-      $this->Link(),
-      $this->SiteConfig->Title . " News",
-      "RSS feed for the news from " . $this->SiteConfig->Title
-    );
+            $this->GetNewsPages(),
+            $this->Link(),
+            $this->SiteConfig->Title . " News", "RSS feed for the news from " . $this->SiteConfig->Title
+        );
         return $rss->outputToBrowser();
     }
-     
+
     public function getCategory()
     {
         $Params = $this->getURLParams();
-        if (is_numeric($Params['ID']) && $Category = NewsCategory::get()->byID((int)$Params['ID'])) {
+        if(is_numeric($Params['ID']) && $Category = NewsCategory::get()->byID((int)$Params['ID'])) {
             return $Category;
         }
     }
-  
+
     public function category()
     {
-        if ($Category = $this->getCategory()) {
+        if($Category = $this->getCategory()) {
             $Data = array(
-        'NewsCategory' => $Category
-      );
+                'NewsCategory' => $Category
+            );
             return $this->customise(array('NewsCategory' => $Category))->renderWith(array('NewsCategory', 'Page'));
         } else {
             return $this->httpError(404, 'Sorry that news category could not be found');
+        }
+    }
+
+    public function getAuthor()
+    {
+        $Params = $this->getURLParams();
+        if(is_numeric($Params['ID']) && $Author = NewsAuthor::get()->byID((int)$Params['ID'])) {
+            return $Author;
+        }
+    }
+
+    public function author()
+    {
+        if($Author = $this->getAuthor()) {
+            $Data = array(
+                'NewsAuthor' => $Author
+            );
+            return $this->customise(array('NewsAuthor' => $Author))->renderWith(array('NewsAuthor', 'Page'));
+        } else {
+            return $this->httpError(404, 'Sorry that news author could not be found');
         }
     }
 
@@ -158,4 +185,5 @@ class NewsHolder_Controller extends Page_Controller
         }
         return $CategoriesFiltered;
     }
+
 }

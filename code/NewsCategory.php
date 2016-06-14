@@ -7,20 +7,20 @@ class NewsCategory extends DataObject
         'Title' => 'Text',
         'Description' => 'HTMLText'
     );
-    
+
     private static $has_one = array(
-    'NewsHolder' => 'NewsHolder'
-  );
+        'NewsHolder' => 'NewsHolder'
+    );
 
     private static $belongs_many_many = array(
         'NewsPages' => 'NewsPage'
     );
 
     private static $summary_fields = array(
-    'Title' => 'Title',
-    'DescriptionExcerpt' => 'Description'
-  );
-    
+        'Title' => 'Title',
+        'DescriptionExcerpt' => 'Description'
+    );
+
     public function getCMSFields()
     {
         return new FieldList(
@@ -28,14 +28,14 @@ class NewsCategory extends DataObject
             HTMLEditorField::create('Description')->setTitle('Category Description')
         );
     }
-    
+
     public function Link()
     {
-        if (Controller::curr()->ClassName == 'NewsHolder') {
-            return Controller::curr()->Link() . "category/" . $this->ID;
+        if(Controller::curr()->ClassName == 'NewsHolder') {
+            return Controller::join_links(Controller::curr()->URLSegment, 'category', $this->ID);
         }
-        if (Controller::curr()->ClassName == 'NewsPage') {
-            return Controller::curr()->Parent()->Link() . "category/" . $this->ID;
+        if(Controller::curr()->ClassName == 'NewsPage') {
+            return Controller::join_links(Controller::curr()->Parent()->URLSegment, 'category', $this->ID);
         }
     }
 
@@ -55,7 +55,7 @@ class NewsCategory extends DataObject
     {
         return true;
     }
-    
+
     public function LinkingMode()
     {
         if (Controller::curr()->ClassName == 'NewsHolder') {
@@ -65,16 +65,11 @@ class NewsCategory extends DataObject
         }
     }
 
-    public function test()
+    public function getNewsPages()
     {
-        return 'test';
+        return $this->getManyManyComponents('NewsPages');
     }
 
-    public function GetNewsPages()
-    {
-        return $this->getManyManyComponents("NewsPages");
-    }
-   
     public function PaginatedNews()
     {
         if (Controller::curr()->ClassName == 'NewsHolder') {
@@ -86,7 +81,7 @@ class NewsCategory extends DataObject
         if ($NewsExcerptsPerPage == '0') {
             $NewsExcerptsPerPage = '15';
         }
-        $PaginatedNews = new PaginatedList($this->GetNewsPages(), Controller::curr()->request);
+        $PaginatedNews = new PaginatedList($this->getNewsPages(), Controller::curr()->request);
         $PaginatedNews->setPageLength($NewsExcerptsPerPage);
         return $PaginatedNews;
     }

@@ -1,20 +1,20 @@
-<?php 
- 
+<?php
+
 class NewsPage extends Page
 {
 
     private static $db = array(
-    'Date' => 'Date',
-    'Author' => 'Text'
-  );
+        'Date' => 'Date'
+    );
 
     private static $has_one = array(
-    'Photo' => 'Image'
-  );
+        'Photo' => 'Image'
+    );
 
     private static $many_many = array(
-    'NewsCategories' => 'NewsCategory'
-  );
+        'NewsCategories' => 'NewsCategory',
+        'NewsAuthors' => 'NewsAuthor'
+    );
 
     public function singular_name()
     {
@@ -26,10 +26,10 @@ class NewsPage extends Page
     private static $show_in_sitetree = false;
 
     private static $defaults = array(
-    'Date' => 'now',
-    'ShowInMenus' => false
-  );
-    
+        'Date' => 'now',
+        'ShowInMenus' => false
+    );
+
     private static $icon = 'basicnews/images/newspage';
 
     public function getCMSFields()
@@ -41,14 +41,15 @@ class NewsPage extends Page
         $imagefield->folderName = 'News';
         $imagefield->getValidator()->allowedExtensions = array('jpg','jpeg','gif','png');
         $imagefield->getValidator()->setAllowedMaxFileSize('2097152'); // 2 MB in bytes
-    $categoriesMap = NewsCategory::get()->filter('NewsHolderID', $this->Parent()->ID)->sort('Title ASC')->map('ID', 'Title')->toArray();
+        $categoriesMap = NewsCategory::get()->filter('NewsHolderID', $this->Parent()->ID)->sort('Title ASC')->map('ID', 'Title')->toArray();
+        $authorsMap = NewsAuthor::get()->filter('NewsHolderID', $this->Parent()->ID)->sort('LastName ASC')->map('ID', 'FullName')->toArray();
         $fields = parent::getCMSFields();
         $fields->addFieldsToTab('Root.Main', array(
-      $datefield,
-      TextField::create('Author')->setTitle('Author Name'),
-      $imagefield,
-      ListboxField::create('NewsCategories')->setTitle('Category')->setMultiple(true)->setSource($categoriesMap)
-    ), 'Content');
+            $datefield,
+            ListboxField::create('NewsAuthors')->setTitle('Author')->setMultiple(true)->setSource($authorsMap),
+            ListboxField::create('NewsCategories')->setTitle('Category')->setMultiple(true)->setSource($categoriesMap),
+            $imagefield,
+        ), 'Content');
         return $fields;
     }
 
@@ -91,8 +92,9 @@ class NewsPage extends Page
     {
         return $this->obj('Date')->Format("F j, Y");
     }
+
 }
- 
+
 class NewsPage_Controller extends Page_Controller
 {
 
@@ -129,4 +131,5 @@ class NewsPage_Controller extends Page_Controller
     {
         return $this->Parent();
     }
+
 }
