@@ -3,7 +3,7 @@ Simple News Module
 
 ## Author
 * Andrew Houle
-* http://andyhoule.com
+* http://andrewhoule.me
 
 ## Requirements
 * SilverStripe minimum version 3.0+.
@@ -16,7 +16,6 @@ Via Composer run "composer require andrewhoule/silverstripe-basicnews dev-master
 
 ## Todo
 * Add date filters
-* Add RSS Feed
 * Add commenting option
 
 
