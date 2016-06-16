@@ -31,12 +31,7 @@ class NewsCategory extends DataObject
 
     public function Link()
     {
-        if(Controller::curr()->ClassName == 'NewsHolder') {
-            return Controller::join_links(Controller::curr()->URLSegment, 'category', $this->ID);
-        }
-        if(Controller::curr()->ClassName == 'NewsPage') {
-            return Controller::join_links(Controller::curr()->Parent()->URLSegment, 'category', $this->ID);
-        }
+        return Controller::join_links($this->NewsHolder()->URLSegment, 'category', $this->ID);
     }
 
     public function canCreate($Member = null)

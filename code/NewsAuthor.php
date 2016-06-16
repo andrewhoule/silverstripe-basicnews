@@ -76,12 +76,7 @@ class NewsAuthor extends DataObject
 
     public function Link()
     {
-        if(Controller::curr()->ClassName == 'NewsHolder') {
-            return Controller::join_links(Controller::curr()->URLSegment, 'author', $this->ID);
-        }
-        if (Controller::curr()->ClassName == 'NewsPage') {
-            return Controller::join_links(Controller::curr()->Parent()->URLSegment, 'author', $this->ID);
-        }
+        return Controller::join_links($this->NewsHolder()->URLSegment, 'author', $this->ID);
     }
 
     public function getNewsPages()
